@@ -1,0 +1,33 @@
+html  {
+    box-sizing: border-box;
+    min-height: 100%;
+    background-color: #4762A1;
+}
+
+#parksIcon {
+    display: block;
+    width: 100px;
+    height: 100px;
+}
+
+#navContainer {
+    background-image:url("../images/png/family-travel-guide-mount-washington-hotel-new-hampshire-today-180423-tease.jpg");
+}
+
+#contentContainer {
+    height: 100%;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
