@@ -26,10 +26,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/mountains_info.html">Mountains Information</a>
+                <a class="nav-link active" href="/parks_search.html">Search for Parks</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="/parks_search.html">Search for Parks</a>
+                <a class="nav-link" aria-current="page" href="/mountains_info.html">Mountains Information</a>
               </li>
             </ul>
           </div>
@@ -37,14 +37,39 @@
       </nav>
 
     <main>
-        <div class="bg-color-secondary-1-2" id="contentContainer">
+        <div class="container-fluid" id="contentContainer">
+            <div class="row p-5">
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="locationRadio">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Search by Location
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="parkTypeRadio">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Search by Park Type
+                        </label>
+                      </div>
+                </div>
+            </div>
+            <div class="row p-5 locationsListContainer">
+                <div class="col md-6">
+                    <label for="exampleDataList" class="form-label">Park Location</label>
+                    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..." maxlength="50">
+                    <datalist id="datalistOptions">
 
-
+                    </datalist>
+                </div>
+            </div>
         </div>
         
     </main>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="./assets/scripts/load_national_parks_data.js"></script>
+    <script src="./assets/scripts/parks_search.js"></script>
 </body>
 </html>
