@@ -3,11 +3,11 @@ let parksSearchOptions = document.querySelector("#datalistOptions");
 let locationRadio = document.querySelector("#locationRadio");
 let parkTypeRadio = document.querySelector("#parkTypeRadio");
 let locationsListContainer = document.querySelector(".locationsListContainer")
-let datalistInput = document.querySelector("#exampleDataList");
 let locationOutPutContainer = document.querySelector(".locationOutPutContainer");
 let parkTypedatalistOptions = document.querySelector("#parkTypedatalistOptions");
+let parkTypeDataList = document.querySelector("#parkTypeDataList")
 let parkTypeListContainer = document.querySelector(".parkTypeListContainer");
-
+let parkTypeOutPutContainer = document.querySelector(".parkTypeOutPutContainer");
 
 parkTypeRadio.addEventListener("click", () => {
     locationsListContainer.classList.add("d-none");
@@ -39,3 +39,11 @@ parksSearchDataList.addEventListener("change", () => {
     })
     
 })
+console.log(parkTypeDataList)
+parkTypeDataList.addEventListener("change", () => {
+    parkTypeOutPutContainer.classList.remove("d-none");
+    let matches = nationalParksArray.filter((park) => park.LocationName.includes(parkTypeDataList.value))
+    
+    console.log(matches)
+})
+    
