@@ -15,13 +15,22 @@ html  {
 }
 
 #contentContainer div {
-    height: 100%;
-    width: 100%;
+
     background-color: #4762A1;
 }
 
 main {
     background-color: #4762A1;
+}
+
+.parkCards {
+    display: flex;
+    min-height: max-content;
+
+}
+
+#exampleDataList, #parkTypeDataList {
+    width: 200px;
 }
 
 
