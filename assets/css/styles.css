@@ -29,7 +29,7 @@ main {
 
 }
 
-#exampleDataList, #parkTypeDataList {
+#exampleDataList, #parkTypeDataList, #mountainDataList {
     width: 200px;
 }
 

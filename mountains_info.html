@@ -38,7 +38,21 @@
 
     <main>
         <div class="bg-color-secondary-1-2" id="contentContainer">
+            <div class="row p-5">
+                <div class="col md-6">
+                    <label for="exampleDataList" class="form-label">Search for a Mountain</label>
+                    <input class="form-control" list="mountaindatalistOptions" id="mountainDataList" placeholder="Type to search..." maxlength="50">
+                    <datalist id="mountaindatalistOptions">
+                    </datalist>
+                </div>
+                <div class="col md-6">
+                    <button type="button" id="showAllMountainsButton">Show All Mountains</button>
+                </div>
+            </div>
+            
 
+        </div>
+        <div class="container mountainsOutPutContainer d-none">
 
         </div>
         
@@ -46,5 +60,7 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="./assets/scripts/load_mountains_data.js"></script>
+    <script src="./assets/scripts/mountains_info.js"></script>
 </body>
 </html>
