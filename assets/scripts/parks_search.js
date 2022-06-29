@@ -1,3 +1,6 @@
+//Grab the show all  parks button
+let showAllParksButton = document.querySelector("#showAllParksButton");
+
 //Parks Search data list
 let parksSearchDataList = document.querySelector("#exampleDataList");
 let parksSearchOptions = document.querySelector("#datalistOptions");
@@ -54,7 +57,7 @@ parksSearchDataList.addEventListener("change", () => {
 
 parkTypeDataList.addEventListener("change", () => {
     parkTypeOutPutContainer.classList.remove("d-none");
-    let matches = nationalParksArray.filter((park) => park.LocationName.includes(parkTypeDataList.value))
+    let matches = nationalParksArray.filter((park) => park.LocationName.toUpperCase().includes(parkTypeDataList.value.toUpperCase()) === true)
     console.log(matches)
     displayParks(matches, parkTypeOutPutContainer)
 })
@@ -78,14 +81,46 @@ function displayParks(matches, outputContainer) {
         newRows[rowIndex].innerHTML += `
             <div class="col p-3 parkCards">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" id="parkCard${park.LocationID}">
                         <h5 class="card-title">${park.LocationName}</h5>
                         <p class="card-text">${park.Address}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <p class="card-text">${park.City}, ${park.State}, ${park.ZipCode}</p>
+                        <p class="card-text"><b>Phone: </b>${park.Phone}</p>
+                        <p class="card-text"><b>Fax: </b>${park.Fax}</p>
+                        <p class="card-text sunrise d-none"></p>
+                        <p class="card-text sunset d-none"></p>
                     </div>
                 </div>
             </div>`
 
         columnsAdded++
+
+        getSunsetForMountain(park.Latitude, park.Longitude).then((data) => {
+            console.log(data)
+            let sunriseData = document.querySelector(`#parkCard${park.LocationID} > p.sunrise`);
+
+            let sunsetData = document.querySelector(`#parkCard${park.LocationID} > p.sunset`);
+
+            sunriseData.innerHTML = `<b>Sunrise: </b>${data.results.sunrise}`
+            sunsetData.innerHTML = `<b>Sunset: </b>${data.results.sunset}`
+            sunriseData.classList.remove("d-none")
+            sunsetData.classList.remove("d-none")
+        })
     })
 }
+
+showAllParksButton.addEventListener("click", () => {
+    locationOutPutContainer.innerHTML = "";
+    parkTypeOutPutContainer.innerHTML = "";
+    locationOutPutContainer.classList.remove("d-none");
+    parkTypeOutPutContainer.classList.add("d-none");
+    displayParks(nationalParksArray, locationOutPutContainer);
+})
+
+async function getSunsetForMountain(lat, lng){
+    let response = await fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today`)
+    let data = await response.json()
+    return data
+}
+
+

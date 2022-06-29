@@ -5,6 +5,7 @@ console.log(showAllMountainsButton)
 
 mountainDataList.addEventListener("change", () => {
     mountainsOutPutContainer.classList.remove("d-none");
+    mountainsOutPutContainer.innerHTML = "";
     console.log(mountainDataList.value)
     let matches = mountainsArray.filter((mountain) => mountain.name === mountainDataList.value)
     console.log(matches)
@@ -12,7 +13,7 @@ mountainDataList.addEventListener("change", () => {
 })
 
 showAllMountainsButton.addEventListener("click", () => {
-    showAllMountainsButton.classList.remove("d-none")
+    mountainsOutPutContainer.classList.remove("d-none")
     displayMoutains(mountainsArray, mountainsOutPutContainer);
 })
 
@@ -23,10 +24,10 @@ function displayMoutains(matches, outputContainer) {
     let rowsToAdd = Math.ceil(matches.length / cardsPerRow)
 
     for(let i = 1; i <= rowsToAdd; i++) {
-        outputContainer.innerHTML += `<div class="row p-3 parkRows"></div>`
+        outputContainer.innerHTML += `<div class="row p-3 mountainRows"></div>`
     }
     
-    let newRows = document.querySelectorAll(".parkRows")
+    let newRows = document.querySelectorAll(".mountainRows")
     let columnsAdded = 0;
     let rowIndex = 0;
     matches.forEach((mountain) => {
@@ -50,7 +51,7 @@ function displayMoutains(matches, outputContainer) {
 
         columnsAdded++
 
-        getSunsetForMountain(mountain.lat, mountain.lng).then((data) => {
+        getSunsetForMountain(mountain.coords.lat, mountain.coords.lng).then((data) => {
 
             let sunriseData = document.querySelector(`#mountainCard${mountain.name.replace(" ", "").replace(".", "").replace("'", "")} > p.sunrise`);
 

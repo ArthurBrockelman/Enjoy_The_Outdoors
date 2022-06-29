@@ -26,11 +26,16 @@ main {
 .parkCards {
     display: flex;
     min-height: max-content;
+    max-width: 500px;
 
 }
 
 #exampleDataList, #parkTypeDataList, #mountainDataList {
     width: 200px;
+}
+
+nav {
+    background-image: url("../images/png/family-travel-guide-mount-washington-hotel-new-hampshire-today-180423-tease.jpg");
 }
 
 
