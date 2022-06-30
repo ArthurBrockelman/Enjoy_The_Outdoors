@@ -14,7 +14,6 @@ window.onload = function(){
 
     loadJsonData("assets/data/nationalparks.json").then((nationalParks) => {
         nationalParksArray = nationalParks.parks;
-        let outputContainer = document.querySelector("#locationOutPutContainer")
         let datalistOptions = document.querySelector("#parkEventsDatalistOptions")
 
         nationalParksArray.forEach((park) => {
@@ -45,13 +44,20 @@ let loadNPSNews = async (parkCode) => {
     newsOutPutContainer.classList.remove("d-none");
     let response = await fetch(`https://developer.nps.gov/api/v1/newsreleases?parkCode=${parkCode}&api_key=Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ`);
     let data = await response.json();
-    console.log(data.data)
-    displayEvents(data.data, newsOutPutContainer)
+    if(data.data.length === 0) {
+        let datalistOptions = document.querySelector("#parkEventsDatalistOptions")
+        displayNoEvents(datalistOptions.value, newsOutPutContainer)
+    } else {
+        displayEvents(data.data, newsOutPutContainer)
+    }
 
 };
 
 function displayEvents(events, outputContainer) {
 
+    let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
+    newsOutPutContainer.innerHTML = ""
+    newsOutPutContainer.classList.remove("d-none");
 
     //Set cards per row
     let cardsPerRow = 3;
@@ -86,8 +92,11 @@ function displayEvents(events, outputContainer) {
         newRows[rowIndex].innerHTML += `
             <div class="col p-3 parkCards">
                 <div class="card">
-                    <div class="card-body" id="parkCard${event.LocationID}">
-                        <h5 class="card-title">${event.title}</h5>
+                    <div class="card-body" id="eventCard${event.id}">
+                        <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
+                        <img src="${event.image.url}" class="newsImages">
+                        <p>${event.abstract}</p>
+                        <p>Released: ${event.releaseDate.slice(0,10)}</p>
                         
                     </div>
                 </div>
@@ -98,18 +107,37 @@ function displayEvents(events, outputContainer) {
     })
 }
 
-let parkEventsDatalist = document.querySelector("#parkEventsDatalist")
+
 
 parkEventsDatalist.addEventListener("change", () => {
-
+    let parkEventsDatalist = document.querySelector("#parkEventsDatalist")
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
     newsOutPutContainer.innerHTML = ""
     newsOutPutContainer.classList.remove("d-none");
 
     //Look for matches of the selected value in the national parks array.
     let matches = nationalParksArray.filter((park) => park.LocationName === parkEventsDatalist.value);
+    console.log(matches[0], parkEventsDatalist.value)
+    loadNPSNews(matches[0].LocationID)
 
-    loadNPSNews(matches, newsOutPutContainer)
 })
+
+function displayNoEvents(park) {
+
+    let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
+    newsOutPutContainer.innerHTML = ""
+    newsOutPutContainer.classList.remove("d-none");
+    newsOutPutContainer.innerHTML = `
+    <div class="row p-3 parkRows">
+        <div class="col p-3 parkCards">
+            <div class="card">
+                <div class="card-body" id="eventCard">
+                    <h5 No News for ${park}</h5>
+                </div>
+            </div>
+        </div>
+    </div>`
+
+}
 
 
