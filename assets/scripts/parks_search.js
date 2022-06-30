@@ -67,12 +67,14 @@ parksSearchDataList.addEventListener("change", () => {
     //Show the output container.
     locationOutPutContainer.classList.remove("d-none")
 
+    locationOutPutContainer.innerHTML = ""
+
     //Look for matches of the selected value in the national parks array.
     let matches = nationalParksArray.filter((park) => park.State === parksSearchDataList.value)
 
     //Call the display parks function.
     displayParks(matches, locationOutPutContainer)
-
+    addShowMoreInfoEventListeners(matches, locationOutPutContainer)
 })
 
 //Add an event listener to the park type datalist.
@@ -86,6 +88,7 @@ parkTypeDataList.addEventListener("change", () => {
 
     //Call the display parks function
     displayParks(matches, parkTypeOutPutContainer)
+    addShowMoreInfoEventListeners(matches, parkTypeOutPutContainer)
 })
 
 //Function to display parks given an array of parks and a container to load them in.
@@ -103,6 +106,7 @@ function displayParks(matches, outputContainer) {
 
     let columnsAdded = 0;
     let rowIndex = 0;
+
     matches.forEach((park) => {
         if(columnsAdded % cardsPerRow === 0 && columnsAdded !== 0) {
             rowIndex++
@@ -119,6 +123,10 @@ function displayParks(matches, outputContainer) {
                         ${checkVisitor(park)}
                         <p class="card-text sunrise d-none"></p>
                         <p class="card-text sunset d-none"></p>
+                        <button type="button" class="btn btn-success" id="ShowMoreInfoButton${park.LocationID.toUpperCase()}">More Info</button>
+                        <div class="spinner-border text-primary d-none" role="status" id="LoadingSpinner${park.LocationID}">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>`
@@ -133,6 +141,8 @@ showAllParksButton.addEventListener("click", () => {
     locationOutPutContainer.classList.remove("d-none");
     parkTypeOutPutContainer.classList.add("d-none");
     displayParks(nationalParksArray, locationOutPutContainer);
+    addShowMoreInfoEventListeners(nationalParksArray, locationOutPutContainer);
+
 })
 
 async function getSunsetForParks(lat, lng){
@@ -157,8 +167,77 @@ function checkPhone(park) {
     }
 }
 
+let loadParkData = async (parkCode) => {
+
+    let response = await fetch(`https://developer.nps.gov/api/v1/parks?parkCode=${parkCode}&api_key=Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ`)
+    let data = await response.json()
+    return data
+}
+
+function addShowMoreInfoEventListeners(matches, OutPutContainer) {
+    matches.forEach((park) => {
+        let ShowMoreInfoButton = document.querySelector(`#ShowMoreInfoButton${park.LocationID.toUpperCase()}`)
+        console.log(ShowMoreInfoButton)
+        console.log(park.LocationID.toUpperCase(), `#ShowMoreInfoButton${park.LocationID.toUpperCase()}`)
+
+        ShowMoreInfoButton.addEventListener("click", () => {
+            OutPutContainer.innerHTML = ""
+
+            loadParkData(park.LocationID).then((data) => {
+
+                let park = data.data[0]
+ 
+                OutPutContainer.innerHTML += `
+                <div class="col p-3 individualparkCards">
+                    <div class="card">
+                        <div class="card-body" id="parkCard${park.fullName}">
+                            <h1 class="card-title">${park.fullName}</h1>
+                            <p class="card-text">${park.description}</p>
+                            <h2 class="card-title">Activities</h2>
+                            <ul id="${park.parkCode}Activities">
+                            </ul>
+                            <div id="${park.parkCode}ImageContainer">
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            loadActivities(park)
+            loadImages(park)
+            })
+            
+        })
+    })
+}
+
+function dumpVals(obj) {
+    let returnval = ``
+    for (let k in obj) {
+      if (typeof obj[k] === "object") {
+        dumpVals(obj[k])
+      } else {
+        // base case, stop recurring
+        returnval += `<p>${obj[k]}</p>`
+        console.log(obj[k])
+      }
+    }
+    return returnval
+  }
 
 
+function loadActivities(park) {
+    let parkActivitiesList = document.querySelector(`#${park.parkCode}Activities`)
+    console.log(park)
+    park.activities.forEach((activity) => {
+        parkActivitiesList.innerHTML += `<li>${activity.name}</li>`
+    })
+}
+
+function loadImages(park) {
+    let imageContainer = document.querySelector(`#${park.parkCode}ImageContainer`)
+    park.images.forEach((image) => {
+        imageContainer.innerHTML += `<img src="${image.url}" class="parkImages">`
+    })
+}
 ////The below can be added to the display parks function if numerous calls to the api are OK.
 // getSunsetForMountain(park.Latitude, park.Longitude).then((data) => {
 
@@ -171,3 +250,4 @@ function checkPhone(park) {
 //     sunriseData.classList.remove("d-none")
 //     sunsetData.classList.remove("d-none")
 // })
+//Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ

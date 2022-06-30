@@ -38,6 +38,15 @@ nav {
     background-image: url("../images/png/family-travel-guide-mount-washington-hotel-new-hampshire-today-180423-tease.jpg");
 }
 
+#individualparkCards {
+    max-width: fit-content;
+}
+
+.parkImages {
+    max-width: 200px;
+    max-height: 200px;
+}
+
 
 
 
