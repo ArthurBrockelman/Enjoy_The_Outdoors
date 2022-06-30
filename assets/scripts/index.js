@@ -44,11 +44,12 @@ let loadNPSNews = async (parkCode) => {
     newsOutPutContainer.classList.remove("d-none");
     let response = await fetch(`https://developer.nps.gov/api/v1/newsreleases?parkCode=${parkCode}&api_key=Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ`);
     let data = await response.json();
+    console.log(data.data.length)
     if(data.data.length === 0) {
-        let datalistOptions = document.querySelector("#parkEventsDatalistOptions")
-        displayNoEvents(datalistOptions.value, newsOutPutContainer)
+        
+        displayNoEvents()
     } else {
-        displayEvents(data.data, newsOutPutContainer)
+        displayEventsCarousel(data.data, newsOutPutContainer)
     }
 
 };
@@ -79,7 +80,7 @@ function displayEvents(events, outputContainer) {
 
     //Loop through the filtered array that was passed in the function.
     events.forEach((event) => {
-        console.log(event)
+        console.log(event, "event trigger")
         //Check to see if we move to a new row, first column added should be ignored but otherwise
         //We can check to see if there is no remainder for the columns added / the cards per row.
         if(columnsAdded % cardsPerRow === 0 && columnsAdded !== 0) {
@@ -122,8 +123,8 @@ parkEventsDatalist.addEventListener("change", () => {
 
 })
 
-function displayNoEvents(park) {
-
+function displayNoEvents() {
+    let datalistOptions = document.querySelector("#parkEventsDatalist")
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
     newsOutPutContainer.innerHTML = ""
     newsOutPutContainer.classList.remove("d-none");
@@ -132,12 +133,59 @@ function displayNoEvents(park) {
         <div class="col p-3 parkCards">
             <div class="card">
                 <div class="card-body" id="eventCard">
-                    <h5 No News for ${park}</h5>
+                    <h5>No News for ${datalistOptions.value}, sorry :(</h5>
                 </div>
             </div>
         </div>
     </div>`
 
+}
+
+function displayEventsCarousel(events, outputContainer) {
+
+    let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
+    newsOutPutContainer.innerHTML = ""
+    newsOutPutContainer.classList.remove("d-none");
+    newsOutPutContainer.innerHTML += `
+        <div class="container carouselContainer p-5">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>`
+    let carouselInner = document.querySelector(".carousel-inner")
+    console.log(carouselInner)
+    let active = "active"
+    //Loop through the filtered array that was passed in the function.
+    events.forEach((event) => {
+        console.log(event,event.image.url)
+        if(event.image.url.trim() !== ''){
+        carouselInner.innerHTML += `                
+            <div class="carousel-item ${active}">
+                 
+                <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
+                <p>${event.abstract}</p>
+                <img src="${event.image.url}" class="d-block w-100 eventImages" alt="...">
+            </div>`
+        } else {
+            carouselInner.innerHTML += `                
+            <div class="carousel-item ${active}">
+                <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
+                <p>${event.abstract}</p>
+            </div>` 
+        }
+
+        active = ""
+
+    })
 }
 
 
