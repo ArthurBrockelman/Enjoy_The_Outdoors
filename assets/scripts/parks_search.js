@@ -235,7 +235,7 @@ function loadActivities(park) {
 function loadImages(park) {
     let imageContainer = document.querySelector(`#${park.parkCode}ImageContainer`)
     park.images.forEach((image) => {
-        imageContainer.innerHTML += `<img src="${image.url}" class="parkImages">`
+        imageContainer.innerHTML += `<img src="${image.url}" class="parkImages p-2">`
     })
 }
 ////The below can be added to the display parks function if numerous calls to the api are OK.

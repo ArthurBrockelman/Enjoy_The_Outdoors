@@ -25,3 +25,5 @@ let loadJsonData = async (path) => {
     let data = await response.json()
     return data
 }
+
+let loadParksData
