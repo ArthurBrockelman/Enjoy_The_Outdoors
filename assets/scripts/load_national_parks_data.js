@@ -26,4 +26,12 @@ let loadJsonData = async (path) => {
     return data
 }
 
-let loadParksData
+let loadNPSNews = async () => {
+
+    let response = await fetch(`https://developer.nps.gov/api/v1/newsreleases?api_key=Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ`);
+    let data = await response.json();
+    console.log(data)
+    return data;
+    
+    
+};

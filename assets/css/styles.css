@@ -14,10 +14,11 @@ html  {
     background-image:url("../images/png/family-travel-guide-mount-washington-hotel-new-hampshire-today-180423-tease.jpg");
 }
 
-#contentContainer div {
+#contentContainer {
 
     background-color: #4762A1;
 }
+
 
 main {
     background-color: #4762A1;
@@ -34,6 +35,10 @@ main {
     width: 200px;
 }
 
+#parkEventsDatalist {
+    width: 400px;
+}
+
 nav {
     background-image: url("../images/png/family-travel-guide-mount-washington-hotel-new-hampshire-today-180423-tease.jpg");
 }
@@ -45,6 +50,10 @@ nav {
 .parkImages {
     max-width: 200px;
     max-height: 200px;
+}
+
+#searchContainer {
+    background-color: aliceblue;
 }
 
 

@@ -37,25 +37,26 @@
       </nav>
 
     <main>
-        <div class="bg-color-secondary-1-2" id="contentContainer">
-            <div class="row p-5">
-                <div class="col md-6">
-                    <label for="exampleDataList" class="form-label">Search for a Mountain</label>
-                    <input class="form-control" list="mountaindatalistOptions" id="mountainDataList" placeholder="Type to search..." maxlength="50">
-                    <datalist id="mountaindatalistOptions">
-                    </datalist>
-                </div>
-                <div class="col md-6">
-                    <button type="button" id="showAllMountainsButton">Show All Mountains</button>
+        <div class="bg-color-secondary-1-2 p-5" id="contentContainer">
+            <div class="container" id="searchContainer">
+                    <div class="row p-2">
+                        <div class="container">
+                            <div class="col md-6 p-2">
+                                <label for="exampleDataList" class="form-label">Search for a Mountain</label>
+                                <input class="form-control" list="mountaindatalistOptions" id="mountainDataList" placeholder="Type to search..." maxlength="50">
+                                <datalist id="mountaindatalistOptions">
+                                </datalist>
+                            </div>
+                            <div class="col md-6 p-2">
+                                <button type="button" id="showAllMountainsButton">Show All Mountains</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            
-
+        <div class="container mountainsOutPutContainer d-none"></div>
         </div>
-        <div class="container mountainsOutPutContainer d-none">
-
-        </div>
-        
     </main>
 
     <!-- Bootstrap Bundle with Popper -->
