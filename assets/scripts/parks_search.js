@@ -114,8 +114,9 @@ function displayParks(matches, outputContainer) {
                         <h5 class="card-title">${park.LocationName}</h5>
                         <p class="card-text">${park.Address}</p>
                         <p class="card-text">${park.City}, ${park.State}, ${park.ZipCode}</p>
-                        <p class="card-text"><b>Phone: </b>${park.Phone}</p>
+                        ${checkPhone(park)}
                         <p class="card-text"><b>Fax: </b>${park.Fax}</p>
+                        ${checkVisitor(park)}
                         <p class="card-text sunrise d-none"></p>
                         <p class="card-text sunset d-none"></p>
                     </div>
@@ -139,6 +140,24 @@ async function getSunsetForParks(lat, lng){
     let data = await response.json()
     return data
 }
+
+function checkVisitor(park) {
+    if(typeof(park.Visit) != "undefined") {
+        return `<p class="card-text"><b>Visit Us: </b><a href="${park.Visit}" target="_blank">${park.Visit}</a></p>`
+    } else {
+        return ""
+    }
+}
+
+function checkPhone(park) {
+    if(park.Phone !== 0) {
+        return `<p class="card-text"><b>Phone: </b>${park.Phone}</p>`
+    } else {
+        return ""
+    }
+}
+
+
 
 ////The below can be added to the display parks function if numerous calls to the api are OK.
 // getSunsetForMountain(park.Latitude, park.Longitude).then((data) => {
