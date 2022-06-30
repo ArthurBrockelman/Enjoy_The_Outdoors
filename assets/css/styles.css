@@ -22,13 +22,14 @@ html  {
 
 main {
     background-color: #4762A1;
+    color: aliceblue;
 }
 
 .parkCards {
     display: flex;
     min-height: max-content;
     max-width: 500px;
-
+    color:  #4762A1;;
 }
 
 #exampleDataList, #parkTypeDataList, #mountainDataList {
