@@ -13,13 +13,21 @@ window.onload = function(){
     })
 
     loadJsonData("assets/data/nationalparks.json").then((nationalParks) => {
+
         nationalParksArray = nationalParks.parks;
+
+        //Get the events list datalist dropdown.
         let datalistOptions = document.querySelector("#parkEventsDatalistOptions")
 
+        //Loop over the park and display the location name in the dropdown.
         nationalParksArray.forEach((park) => {
+
+            //Add the option.
             datalistOptions.innerHTML += `<option value="${park.LocationName}">${park.LocationName}</option>`
+
         })
         
+        //Load some events, default to acadia national park.
         loadNPSNews("ACAD")
 
 
@@ -27,7 +35,9 @@ window.onload = function(){
     })
 
     loadJsonData("assets/data/parktypes.json").then((parkTypes) => {
+
         parkTypesArray = parkTypes;
+
     })
 
 }
@@ -38,96 +48,74 @@ let loadJsonData = async (path) => {
     return data
 }
 
+//Load news events given a four letter park code.
 let loadNPSNews = async (parkCode) => {
+
+    //Store the output container.
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
-    newsOutPutContainer.innerHTML = ""
+
+    //Reset the output container.
+    newsOutPutContainer.innerHTML = "";
+
+    //Make it visible.
     newsOutPutContainer.classList.remove("d-none");
+
+    //Call the NPS api with the park code.
     let response = await fetch(`https://developer.nps.gov/api/v1/newsreleases?parkCode=${parkCode}&api_key=Qljuiw8TZtWshEnVSv9ty3miWNXmxogbDyFkSSDZ`);
+    
+    //Wait for the response.
     let data = await response.json();
-    console.log(data.data.length)
+
+    //If we have no data then display a message, if there is data display the events.
     if(data.data.length === 0) {
         
-        displayNoEvents()
+        //Show a generic message if no data.
+        displayNoEvents();
+
     } else {
-        displayEventsCarousel(data.data, newsOutPutContainer)
+
+        //Display the events given the array of events and the output container.
+        displayEventsCarousel(data.data);
+
     }
 
 };
 
-function displayEvents(events, outputContainer) {
-
-    let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
-    newsOutPutContainer.innerHTML = ""
-    newsOutPutContainer.classList.remove("d-none");
-
-    //Set cards per row
-    let cardsPerRow = 3;
-
-    //Calculate the number of rows to add by taking the array length and dividing by cards per row.
-    let rowsToAdd = Math.ceil(events.length / cardsPerRow);
-
-    //Add rows.
-    for(let i = 1; i <= rowsToAdd; i++) {
-        outputContainer.innerHTML += `<div class="row p-3 parkRows"></div>`
-    }
-    
-    //Get all the newly added rows in an array.
-    let newRows = document.querySelectorAll(".parkRows")
-
-    //Reset coutners.
-    let columnsAdded = 0;
-    let rowIndex = 0;
-
-    //Loop through the filtered array that was passed in the function.
-    events.forEach((event) => {
-        console.log(event, "event trigger")
-        //Check to see if we move to a new row, first column added should be ignored but otherwise
-        //We can check to see if there is no remainder for the columns added / the cards per row.
-        if(columnsAdded % cardsPerRow === 0 && columnsAdded !== 0) {
-
-            rowIndex++;
-
-        };
-
-        //Add to the park's data to the rows html.
-        newRows[rowIndex].innerHTML += `
-            <div class="col p-3 parkCards">
-                <div class="card">
-                    <div class="card-body" id="eventCard${event.id}">
-                        <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
-                        <img src="${event.image.url}" class="newsImages">
-                        <p>${event.abstract}</p>
-                        <p>Released: ${event.releaseDate.slice(0,10)}</p>
-                        
-                    </div>
-                </div>
-            </div>`
-        
-        //Increment columns added.
-        columnsAdded++;
-    })
-}
-
-
-
+//Add an event listener to the datalist dropdown.
 parkEventsDatalist.addEventListener("change", () => {
-    let parkEventsDatalist = document.querySelector("#parkEventsDatalist")
+
+    //get the datalist dropdown.
+    let parkEventsDatalist = document.querySelector("#parkEventsDatalist");
+
+    //Get the output container.
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
-    newsOutPutContainer.innerHTML = ""
+
+    //Reset the output container.
+    newsOutPutContainer.innerHTML = "";
+
+    //Make it visible.
     newsOutPutContainer.classList.remove("d-none");
 
     //Look for matches of the selected value in the national parks array.
     let matches = nationalParksArray.filter((park) => park.LocationName === parkEventsDatalist.value);
-    console.log(matches[0], parkEventsDatalist.value)
-    loadNPSNews(matches[0].LocationID)
+
+    //Load the data given the four letter park code.
+    loadNPSNews(matches[0].LocationID);
 
 })
 
+//Function to display a short message if there are no events to display.
 function displayNoEvents() {
-    let datalistOptions = document.querySelector("#parkEventsDatalist")
+
+    //Get the datalist and output container.
+    let datalistOptions = document.querySelector("#parkEventsDatalist");
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
-    newsOutPutContainer.innerHTML = ""
+
+    //Clear the output container and make it visible.
+    newsOutPutContainer.innerHTML = "";
     newsOutPutContainer.classList.remove("d-none");
+
+    //Put in some html given the selection of the datalist.
     newsOutPutContainer.innerHTML = `
     <div class="row p-3 parkRows">
         <div class="col p-3 parkCards">
@@ -137,15 +125,23 @@ function displayNoEvents() {
                 </div>
             </div>
         </div>
-    </div>`
+    </div>`;
 
-}
+};
 
-function displayEventsCarousel(events, outputContainer) {
+//Function to display events in a carousel given an array of events.
+function displayEventsCarousel(events) {
 
+    //Get the output container.
     let newsOutPutContainer = document.querySelector(".newsOutPutContainer");
-    newsOutPutContainer.innerHTML = ""
+
+    //Clear its html.
+    newsOutPutContainer.innerHTML = "";
+
+    //Make it visible.
     newsOutPutContainer.classList.remove("d-none");
+
+    //Place in the carousel so we can add items to it.
     newsOutPutContainer.innerHTML += `
         <div class="container carouselContainer p-5">
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -160,32 +156,39 @@ function displayEventsCarousel(events, outputContainer) {
                 <span class="visually-hidden">Next</span>
                 </button>
             </div>
-        </div>`
-    let carouselInner = document.querySelector(".carousel-inner")
-    console.log(carouselInner)
-    let active = "active"
+        </div>`;
+
+    //Get the inner section of the carousel.
+    let carouselInner = document.querySelector(".carousel-inner");
+    
+    //Store active state to be used for the first item.
+    let active = "active";
+
     //Loop through the filtered array that was passed in the function.
     events.forEach((event) => {
-        console.log(event,event.image.url)
-        if(event.image.url.trim() !== ''){
-        carouselInner.innerHTML += `                
-            <div class="carousel-item ${active}">
-                 
-                <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
-                <p>${event.abstract}</p>
-                <img src="${event.image.url}" class="d-block w-100 eventImages" alt="...">
-            </div>`
+        
+        //If we don't have an image url then don't use the image tag, if we do add it.
+        if(event.image.url.trim() !== '') {
+
+            //Add html to the carousel inner section.
+            carouselInner.innerHTML += `                
+                <div class="carousel-item ${active}">    
+                    <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
+                    <p>${event.abstract}</p>
+                    <img src="${event.image.url}" class="d-block w-100 eventImages" alt="...">
+                </div>`;
         } else {
             carouselInner.innerHTML += `                
             <div class="carousel-item ${active}">
                 <h5 class="card-title"><a href="${event.url}" target="_blank">${event.title}</a></h5>
                 <p>${event.abstract}</p>
-            </div>` 
-        }
+            </div>`;
+        };
 
+        //Clear active state.
         active = ""
 
-    })
-}
+    });
+};
 
 
